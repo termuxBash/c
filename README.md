@@ -1,6 +1,6 @@
 # Comprehensive Data Structures in C Reference
 
-This repository contains robust, clean, and well-documented C implementations of fundamental and advanced data structures. Each implementation includes core operations, memory management, algorithmic invariants, and an interactive demo driver (`main`).
+This repository contains robust, clean, and well-documented C implementations of fundamental and advanced data structures. Each implementation includes core operations, memory management, algorithmic invariants, and an interactive demo driver (`main`) or modular library interface.
 
 ---
 
@@ -18,10 +18,12 @@ This repository contains robust, clean, and well-documented C implementations of
 4. [Advanced Priority Queues & Disjoint Sets](#3-advanced-priority-queues--disjoint-sets)
    - [Fibonacci Heap](#31-fibonacci-heap--fibonacciheapc)
    - [Disjoint Set Union (DSU / Union-Find)](#32-disjoint-set-union-dsu--disjointsetc)
-5. [Graph Representations & Traversals](#4-graph-representations--traversals)
-   - [Graph (Adjacency Matrix)](#41-graph-adjacency-matrix--graphc)
-   - [Graph (Adjacency List)](#42-graph-adjacency-list--graphadjlistc)
-6. [Compilation & Execution Guide](#compilation--execution-guide)
+5. [Hashing & Associative Tables](#4-hashing--associative-tables)
+   - [Hash Table (Open Addressing & Linear Probing)](#41-hash-table-open-addressing--linear-probing--hashc)
+6. [Graph Representations & Traversals](#5-graph-representations--traversals)
+   - [Graph (Adjacency Matrix)](#51-graph-adjacency-matrix--graphc)
+   - [Graph (Adjacency List)](#52-graph-adjacency-list--graphadjlistc)
+7. [Compilation & Execution Guide](#compilation--execution-guide)
 
 ---
 
@@ -37,6 +39,7 @@ This repository contains robust, clean, and well-documented C implementations of
 | **B-Tree** | [btree.c](./btree.c) | Multi-Way Search Tree | $O(\log n)$ | $O(\log n)$ | $O(\log n)$ | $O(n)$ |
 | **Fibonacci Heap** | [fibonacciHeap.c](./fibonacciHeap.c) | Priority Queue | $O(1)$ Amortized | $O(\log n)$ Extr-Min | $O(1)$ Min / $O(1)$ Decr-Key | $O(n)$ |
 | **Disjoint Set Union**| [disjointset.c](./disjointset.c) | Set / Partitioning | $O(1)$ makeSet | N/A | $O(\alpha(n)) \approx O(1)$ | $O(n)$ |
+| **Hash Table** | [hash.c](./hash.c) | Associative / Map | Avg $O(1)$, Worst $O(n)$ | Avg $O(1)$, Worst $O(n)$ | Avg $O(1)$, Worst $O(n)$ | $O(\text{size})$ |
 | **Graph (Adj. Matrix)**| [graph.c](./graph.c) | Graph | Edge: $O(1)$ | Edge: $O(1)$ | Edge: $O(1)$, Traversal: $O(V^2)$ | $O(V^2)$ |
 | **Graph (Adj. List)** | [GraphAdjList.c](./GraphAdjList.c) | Graph | Edge: $O(1)$ | Edge: $O(\text{deg}(u))$ | Edge: $O(\text{deg}(u))$, Traversal: $O(V + E)$ | $O(V + E)$ |
 
@@ -67,13 +70,13 @@ int top = -1;   // Index of the top-most item
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [int isEmpty()](./stack.c#L41) | **Check for emptiness**: Returns `1` (`true`) if `top == -1`, otherwise `0`. Used as an underflow guard. |
-| [int isFull()](./stack.c#L50) | **Check for capacity limit**: Returns `1` (`true`) if `top == MAX - 1`, otherwise `0`. Used as an overflow guard. |
+| [int isEmpty()](./stack.c#L44) | **Check for emptiness**: Returns `1` (`true`) if `top == -1`, otherwise `0`. Used as an underflow guard. |
+| [int isFull()](./stack.c#L53) | **Check for capacity limit**: Returns `1` (`true`) if `top == MAX - 1`, otherwise `0`. Used as an overflow guard. |
 | [void push(int item)](./stack.c#L61) | **Push element**: Checks `isFull()`. If false, increments `top` and stores `item` into `stack[top]`. Displays error message on overflow. |
 | [int pop()](./stack.c#L79) | **Pop element**: Checks `isEmpty()`. If false, retrieves `stack[top]`, decrements `top`, and returns the retrieved item. Returns `-1` on underflow. |
-| [int peek()](./stack.c#L96) | **Inspect top**: Checks `isEmpty()`. Returns the element at `stack[top]` without modifying `top`. Returns `-1` if empty. |
-| [void display()](./stack.c#L109) | **Traverse stack**: Iterates downwards from `top` down to index `0`, printing all active stack elements. |
-| [int main()](./stack.c#L127) | **Test driver**: Demonstrates push operations, top peeking, popping, state display, and emptiness checks. |
+| [int peek()](./stack.c#L97) | **Inspect top**: Checks `isEmpty()`. Returns the element at `stack[top]` without modifying `top`. Returns `-1` if empty. |
+| [void display()](./stack.c#L112) | **Traverse stack**: Iterates downwards from `top` down to index `0`, printing all active stack elements. |
+| [int main()](./stack.c#L131) | **Test driver**: Demonstrates push operations, top peeking, popping, state display, and emptiness checks. |
 
 ---
 
@@ -102,13 +105,13 @@ int rear = -1;  // Pointer to enqueue location
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [int isEmpty()](./queue.c#L50) | **Check for emptiness**: Returns `1` if `front == -1`, indicating no elements are queued. |
-| [int isFull()](./queue.c#L59) | **Check for saturation**: Returns `1` if `rear == MAX - 1`, indicating no further insertions can take place in this linear layout. |
-| [void enqueue(int value)](./queue.c#L67) | **Enqueue element**: Validates with `isFull()`. If queue was empty (`front == -1`), sets `front = 0`. Increments `rear` and writes `value` to `queue[rear]`. |
+| [int isEmpty()](./queue.c#L49) | **Check for emptiness**: Returns `1` if `front == -1`, indicating no elements are queued. |
+| [int isFull()](./queue.c#L58) | **Check for saturation**: Returns `1` if `rear == MAX - 1`, indicating no further insertions can take place in this linear layout. |
+| [void enqueue(int value)](./queue.c#L66) | **Enqueue element**: Validates with `isFull()`. If queue was empty (`front == -1`), sets `front = 0`. Increments `rear` and writes `value` to `queue[rear]`. |
 | [int dequeue()](./queue.c#L87) | **Dequeue element**: Validates with `isEmpty()`. Retrieves `queue[front]`. If `front == rear` (single element remaining), resets both `front` and `rear` to `-1`; otherwise advances `front++`. Returns extracted value. |
 | [int peek()](./queue.c#L112) | **Inspect front element**: Validates with `isEmpty()`. Returns `queue[front]` without advancing the pointer. |
-| [void display()](./queue.c#L125) | **Traverse queue**: Iterates from `front` to `rear` inclusive, printing the current queued items in FIFO order. |
-| [int main()](./queue.c#L143) | **Test driver**: Executes enqueue operations, front peeking, sequential dequeue operations, and post-dequeue enqueues. |
+| [void display()](./queue.c#L126) | **Traverse queue**: Iterates from `front` to `rear` inclusive, printing the current queued items in FIFO order. |
+| [int main()](./queue.c#L145) | **Test driver**: Executes enqueue operations, front peeking, sequential dequeue operations, and post-dequeue enqueues. |
 
 ---
 
@@ -136,18 +139,18 @@ typedef struct Node {
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [Node *createNode(int data)](./doublyLinkedList.c#L43) | **Node allocation**: Dynamically allocates a `Node` via `malloc`, initializes `data = data`, and sets `prev = NULL` and `next = NULL`. Validates allocation. |
-| [void insertAtBeginning(Node **head, int data)](./doublyLinkedList.c#L65) | **Prepend node**: Allocates a new node. Links `newNode->next = *head`. If list is non-empty, sets `(*head)->prev = newNode`. Updates `*head = newNode`. Takes $O(1)$ time. |
-| [void insertAtEnd(Node **head, int data)](./doublyLinkedList.c#L89) | **Append node**: If list is empty, sets `*head = newNode`. Otherwise traverses to the final node (`temp->next == NULL`), setting `temp->next = newNode` and `newNode->prev = temp`. |
-| [void insertAtPosition(Node **head, int data, int position)](./doublyLinkedList.c#L117) | **Arbitrary insertion**: Inserts at a 1-based index. Traverses to index `position - 1`. Re-wires `next` and `prev` pointers between predecessor and successor nodes. Validates out-of-bounds inputs. |
-| [void deleteAtBeginning(Node **head)](./doublyLinkedList.c#L170) | **Delete head**: Checks for empty list. Saves `*head` in temporary pointer, advances `*head = (*head)->next`, sets new head's `prev = NULL` (if not NULL), and frees original head. Takes $O(1)$ time. |
-| [void deleteAtEnd(Node **head)](./doublyLinkedList.c#L199) | **Delete tail**: If only one node exists, frees it and sets `*head = NULL`. Otherwise traverses to the last node, unlinks it by setting `temp->prev->next = NULL`, and frees the tail. |
-| [void deleteAtPosition(Node **head, int position)](./doublyLinkedList.c#L233) | **Delete by index**: Traverses to the target node at 1-based position. Splices it out by linking `temp->prev->next = temp->next` and `temp->next->prev = temp->prev` (if successor exists), then calls `free(temp)`. |
-| [Node *searchNode(Node *head, int target)](./doublyLinkedList.c) | **Linear search**: Scans linearly from `head` comparing `temp->data == target`. Returns pointer to node if found, or `NULL`. |
-| [int countNodes(Node *head)](./doublyLinkedList.c) | **List length**: Traverses from head to end, counting total number of active nodes. |
-| [void displayForward(Node *head)](./doublyLinkedList.c) | **Forward printing**: Traverses using `next` pointers from `head` through to the end, printing elements in format `NULL <- [val] <-> ... -> NULL`. |
-| [void displayBackward(Node *head)](./doublyLinkedList.c) | **Reverse printing**: Navigates to the terminal node, then uses `prev` pointers to print elements back to `head`. |
-| [int main()](./doublyLinkedList.c#L364) | **Test driver**: Exercises insertions at head/tail/intermediate positions, bidirectional traversal, searching, node counting, and deletions. |
+| [Node *createNode(int data)](./doublyLinkedList.c#L41) | **Node allocation**: Dynamically allocates a `Node` via `malloc`, initializes `data = data`, and sets `prev = NULL` and `next = NULL`. Validates allocation. |
+| [void insertAtBeginning(Node **head, int data)](./doublyLinkedList.c#L62) | **Prepend node**: Allocates a new node. Links `newNode->next = *head`. If list is non-empty, sets `(*head)->prev = newNode`. Updates `*head = newNode`. Takes $O(1)$ time. |
+| [void insertAtEnd(Node **head, int data)](./doublyLinkedList.c#L85) | **Append node**: If list is empty, sets `*head = newNode`. Otherwise traverses to the final node (`temp->next == NULL`), setting `temp->next = newNode` and `newNode->prev = temp`. |
+| [void insertAtPosition(Node **head, int data, int position)](./doublyLinkedList.c#L115) | **Arbitrary insertion**: Inserts at a 1-based index. Traverses to index `position - 1`. Re-wires `next` and `prev` pointers between predecessor and successor nodes. Validates out-of-bounds inputs. |
+| [void deleteAtBeginning(Node **head)](./doublyLinkedList.c#L165) | **Delete head**: Checks for empty list. Saves `*head` in temporary pointer, advances `*head = (*head)->next`, sets new head's `prev = NULL` (if not NULL), and frees original head. Takes $O(1)$ time. |
+| [void deleteAtEnd(Node **head)](./doublyLinkedList.c#L193) | **Delete tail**: If only one node exists, frees it and sets `*head = NULL`. Otherwise traverses to the last node, unlinks it by setting `temp->prev->next = NULL`, and frees the tail. |
+| [void deleteAtPosition(Node **head, int position)](./doublyLinkedList.c#L232) | **Delete by index**: Traverses to the target node at 1-based position. Splices it out by linking `temp->prev->next = temp->next` and `temp->next->prev = temp->prev` (if successor exists), then calls `free(temp)`. |
+| [Node *searchNode(Node *head, int target)](./doublyLinkedList.c#L274) | **Linear search**: Scans linearly from `head` comparing `temp->data == target`. Returns pointer to node if found, or `NULL`. |
+| [int countNodes(Node *head)](./doublyLinkedList.c#L292) | **List length**: Traverses from head to end, counting total number of active nodes. |
+| [void displayForward(Node *head)](./doublyLinkedList.c#L308) | **Forward printing**: Traverses using `next` pointers from `head` through to the end, printing elements in format `NULL <- [val] <-> ... -> NULL`. |
+| [void displayBackward(Node *head)](./doublyLinkedList.c#L330) | **Reverse printing**: Navigates to the terminal node, then uses `prev` pointers to print elements back to `head`. |
+| [int main()](./doublyLinkedList.c#L358) | **Test driver**: Exercises insertions at head/tail/intermediate positions, bidirectional traversal, searching, node counting, and deletions. |
 
 ---
 
@@ -156,7 +159,7 @@ typedef struct Node {
 ### 2.1 Binary Search Tree (BST) — [binarySearchTree.c](./binarySearchTree.c)
 
 #### Theoretical Concept
-A **Binary Search Tree** is a hierarchical node-based binary tree maintaining the **BST Invariant**:
+A **Binary Search Tree** is a hierarchical node-based binary tree data structure maintaining the **BST Invariant**:
 1. All keys in the left subtree are strictly **less** than the node's key.
 2. All keys in the right subtree are strictly **greater** than the node's key.
 3. Left and right subtrees are themselves binary search trees.
@@ -183,16 +186,16 @@ typedef struct Node {
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [Node *createNode(int key)](./binarySearchTree.c#L50) | **Node allocation**: Allocates a new node via `malloc`, sets `key = key`, `left = NULL`, and `right = NULL`. |
-| [Node *insertNode(Node *root, int key)](./binarySearchTree.c#L68) | **BST insertion**: Recursively traverses left if `key < root->key`, or right if `key > root->key`. When reaching a `NULL` leaf spot, attaches a new node. Duplicates are rejected. |
-| [Node *searchNode(Node *root, int target)](./binarySearchTree.c#L99) | **Search**: Compares `target` with `root->key`. Recursively checks left or right subtree based on value. Returns matching node pointer or `NULL`. |
-| [Node *findMin(Node *root)](./binarySearchTree.c#L121) | **Find minimum**: Follows `left` pointers continuously until `node->left == NULL`. Returns the leftmost node. |
-| [Node *findMax(Node *root)](./binarySearchTree.c#L137) | **Find maximum**: Follows `right` pointers continuously until `node->right == NULL`. Returns the rightmost node. |
-| [Node *deleteNode(Node *root, int key)](./binarySearchTree.c#L153) | **Node deletion**: Locates node with `key`. Handles the 3 deletion cases (0 children, 1 child, 2 children using In-Order Successor). Returns modified subtree root. |
-| [void inOrder(Node *root)](./binarySearchTree.c#L214) | **In-order traversal**: Recursively prints `left`, current `root->key`, then `right`. Yields sorted sequence. |
-| [void preOrder(Node *root)](./binarySearchTree.c#L227) | **Pre-order traversal**: Recursively prints `root->key`, `left`, then `right`. |
-| [void postOrder(Node *root)](./binarySearchTree.c#L240) | **Post-order traversal**: Recursively prints `left`, `right`, then current `root->key`. |
-| [int main()](./binarySearchTree.c#L253) | **Test driver**: Builds a multi-node BST, verifies all three traversals, performs min/max queries, searches keys, and demonstrates all three deletion scenarios. |
+| [Node *createNode(int key)](./binarySearchTree.c#L48) | **Node allocation**: Allocates a new node via `malloc`, sets `key = key`, `left = NULL`, and `right = NULL`. |
+| [Node *insertNode(Node *root, int key)](./binarySearchTree.c#L66) | **BST insertion**: Recursively traverses left if `key < root->key`, or right if `key > root->key`. When reaching a `NULL` leaf spot, attaches a new node. Duplicates are rejected. |
+| [Node *searchNode(Node *root, int target)](./binarySearchTree.c#L97) | **Search**: Compares `target` with `root->key`. Recursively checks left or right subtree based on value. Returns matching node pointer or `NULL`. |
+| [Node *findMin(Node *root)](./binarySearchTree.c#L119) | **Find minimum**: Follows `left` pointers continuously until `node->left == NULL`. Returns the leftmost node. |
+| [Node *findMax(Node *root)](./binarySearchTree.c#L136) | **Find maximum**: Follows `right` pointers continuously until `node->right == NULL`. Returns the rightmost node. |
+| [Node *deleteNode(Node *root, int key)](./binarySearchTree.c#L154) | **Node deletion**: Locates node with `key`. Handles the 3 deletion cases (0 children, 1 child, 2 children using In-Order Successor). Returns modified subtree root. |
+| [void inOrder(Node *root)](./binarySearchTree.c#L210) | **In-order traversal**: Recursively prints `left`, current `root->key`, then `right`. Yields sorted sequence. |
+| [void preOrder(Node *root)](./binarySearchTree.c#L224) | **Pre-order traversal**: Recursively prints `root->key`, `left`, then `right`. |
+| [void postOrder(Node *root)](./binarySearchTree.c#L238) | **Post-order traversal**: Recursively prints `left`, `right`, then current `root->key`. |
+| [int main()](./binarySearchTree.c#L252) | **Test driver**: Builds a multi-node BST, verifies all three traversals, performs min/max queries, searches keys, and demonstrates all three deletion scenarios. |
 
 ---
 
@@ -229,20 +232,20 @@ typedef struct Node {
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [int getHeight(Node *node)](./avlTree.c#L56) | **Subtree height**: Returns `node->height`, or `0` if `node == NULL`. |
-| [int max(int a, int b)](./avlTree.c#L66) | **Utility helper**: Returns the greater of two integers `a` and `b`. |
-| [Node *createNode(int key)](./avlTree.c#L75) | **Node allocation**: Allocates node with `key = key`, `height = 1` (leaf node default), and `left = right = NULL`. |
-| [int getBalanceFactor(Node *node)](./avlTree.c#L93) | **Compute balance factor**: Returns `getHeight(node->left) - getHeight(node->right)`. Returns `0` for `NULL`. |
-| [Node *rightRotate(Node *y)](./avlTree.c#L110) | **LL Rotation**: Rotates node `y` right around child `x`. Reassigns `x->right` to `y` and `y->left` to subtree `T2`. Updates heights of `y` then `x`. Returns new subtree root `x`. |
+| [int getHeight(Node *node)](./avlTree.c#L57) | **Subtree height**: Returns `node->height`, or `0` if `node == NULL`. |
+| [int max(int a, int b)](./avlTree.c#L68) | **Utility helper**: Returns the greater of two integers `a` and `b`. |
+| [Node *createNode(int key)](./avlTree.c#L77) | **Node allocation**: Allocates node with `key = key`, `height = 1` (leaf node default), and `left = right = NULL`. |
+| [int getBalanceFactor(Node *node)](./avlTree.c#L94) | **Compute balance factor**: Returns `getHeight(node->left) - getHeight(node->right)`. Returns `0` for `NULL`. |
+| [Node *rightRotate(Node *y)](./avlTree.c#L111) | **LL Rotation**: Rotates node `y` right around child `x`. Reassigns `x->right` to `y` and `y->left` to subtree `T2`. Updates heights of `y` then `x`. Returns new subtree root `x`. |
 | [Node *leftRotate(Node *x)](./avlTree.c#L137) | **RR Rotation**: Rotates node `x` left around child `y`. Reassigns `y->left` to `x` and `x->right` to subtree `T2`. Updates heights of `x` then `y`. Returns new subtree root `y`. |
-| [Node *insertNode(Node *node, int key)](./avlTree.c#L158) | **Self-balancing insertion**: Performs standard recursive BST insertion, updates node height, evaluates BF, and applies LL, RR, LR, or RL rotation if $|BF| > 1$. |
-| [Node *findMin(Node *root)](./avlTree.c#L221) | **Find minimum**: Follows `left` pointers to retrieve the node with the smallest key. |
-| [Node *deleteNode(Node *root, int key)](./avlTree.c#L235) | **Self-balancing deletion**: Standard BST deletion (handles 0, 1, or 2 children via successor). On unwinding recursion, updates height, calculates balance factor, and triggers necessary rotations. |
-| [Node *searchNode(Node *root, int target)](./avlTree.c#L317) | **Search**: Traverses left or right based on key comparisons in $O(\log n)$ time. |
-| [void inOrder(Node *root)](./avlTree.c#L331) | **In-order traversal**: Recursively outputs elements in ascending sequence. |
-| [void preOrder(Node *root)](./avlTree.c#L344) | **Pre-order traversal**: Recursively outputs `key`, `left`, `right`. Reveals root and subtree structural hierarchy. |
-| [void displayDetails(Node *root)](./avlTree.c#L357) | **Inspect node balance**: Recursively displays key, height, and balance factor for each node in the tree. |
-| [int main()](./avlTree.c#L371) | **Test driver**: Inserts sorted keys (which would skew a basic BST into an $O(n)$ chain), verifies rebalancing rotations, inspects node heights/BFs, searches, and tests deletion rebalancing. |
+| [Node *insertNode(Node *node, int key)](./avlTree.c#L159) | **Self-balancing insertion**: Performs standard recursive BST insertion, updates node height, evaluates BF, and applies LL, RR, LR, or RL rotation if $|BF| > 1$. |
+| [Node *findMin(Node *root)](./avlTree.c#L210) | **Find minimum**: Follows `left` pointers to retrieve the node with the smallest key. |
+| [Node *deleteNode(Node *root, int key)](./avlTree.c#L225) | **Self-balancing deletion**: Standard BST deletion (handles 0, 1, or 2 children via successor). On unwinding recursion, updates height, calculates balance factor, and triggers necessary rotations. |
+| [Node *searchNode(Node *root, int target)](./avlTree.c#L309) | **Search**: Traverses left or right based on key comparisons in $O(\log n)$ time. |
+| [void inOrder(Node *root)](./avlTree.c#L324) | **In-order traversal**: Recursively outputs elements in ascending sequence. |
+| [void preOrder(Node *root)](./avlTree.c#L338) | **Pre-order traversal**: Recursively outputs `key`, `left`, `right`. Reveals root and subtree structural hierarchy. |
+| [void displayDetails(Node *root)](./avlTree.c#L352) | **Inspect node balance**: Recursively displays key, height, and balance factor for each node in the tree. |
+| [int main()](./avlTree.c#L367) | **Test driver**: Inserts sorted keys (which would skew a basic BST into an $O(n)$ chain), verifies rebalancing rotations, inspects node heights/BFs, searches, and tests deletion rebalancing. |
 
 ---
 
@@ -252,11 +255,9 @@ typedef struct Node {
 A **B-Tree** is a self-balancing search tree designed to optimize read and write operations on block-storage media (disks, file systems, databases). In a B-Tree, nodes may have more than two children and contain multiple sorted keys.
 
 This implementation uses **Order 4 (minimum degree $t = 2$)**:
-- Maximum keys per node: `MAX_KEYS` $= 2t - 1 = 3$
-- Minimum keys per non-root node: `MIN_KEYS` $= t - 1 = 1$
-- Maximum children per node: `MAX_CHILDREN` $= 2t = 4$
-
-
+- Maximum keys per node: $\text{MAX\_KEYS} = 2t - 1 = 3$
+- Minimum keys per non-root node: $\text{MIN\_KEYS} = t - 1 = 1$
+- Maximum children per node: $\text{MAX\_CHILDREN} = 2t = 4$
 
 #### Key Invariants
 1. All leaf nodes reside at the **exact same depth**.
@@ -283,14 +284,14 @@ typedef struct BTreeNode {
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [BTreeNode *createNode(int isLeaf)](./btree.c#L56) | **Node allocation**: Allocates a `BTreeNode`, initializes `isLeaf`, sets `numKeys = 0`, and clears all child pointers to `NULL`. |
-| [BTreeNode *search(BTreeNode *root, int key)](./btree.c#L77) | **B-Tree search**: Searches linearly through keys in current node. If match found, returns current node. If not found and node is leaf, returns `NULL`. Otherwise recurses into child subtree `children[i]`. |
-| [void splitChild(BTreeNode *parent, int index, BTreeNode *child)](./btree.c#L113) | **Child splitting**: Splits a full child node (having 3 keys). Allocates a new node `newChild`. Moves the rightmost key (`keys[2]`) and corresponding children to `newChild`. Promotes the median key (`keys[1]`) up into `parent->keys[index]`. Retains leftmost key in `child`. |
-| [void insertNonFull(BTreeNode *node, int key)](./btree.c#L158) | **Insert into non-full node**: If node is a leaf, inserts `key` into its proper sorted position by shifting larger keys right. If internal node, finds child subtree; if child is full, invokes `splitChild`, decides which of the split halves to enter, and recurses. |
-| [void insert(BTreeNode **root, int key)](./btree.c#L203) | **B-Tree insertion**: If tree is empty, creates leaf root. If root has $\text{MAX\_KEYS}$, creates a new root, sets old root as `children[0]`, calls `splitChild(newRoot, 0, oldRoot)` (increasing tree height by 1), and calls `insertNonFull`. Otherwise calls `insertNonFull` directly on root. |
-| [void traverse(BTreeNode *root)](./btree.c#L244) | **In-order traversal**: Iterates through keys $0 \dots \text{numKeys}-1$, recursively traversing child subtree `children[i]` before printing `keys[i]`, followed by the final child subtree `children[numKeys]`. Prints all keys sorted. |
-| [void searchKey(BTreeNode *root, int key)](./btree.c#L270) | **Search helper**: Calls `search()` and prints whether key was found in the B-Tree. |
-| [int main()](./btree.c#L286) | **Test driver**: Inserts multiple keys causing internal node and root splits, traverses tree, and tests search queries. |
+| [BTreeNode *createNode(int isLeaf)](./btree.c#L49) | **Node allocation**: Allocates a `BTreeNode`, initializes `isLeaf`, sets `numKeys = 0`, and clears all child pointers to `NULL`. |
+| [BTreeNode *search(BTreeNode *root, int key)](./btree.c#L70) | **B-Tree search**: Searches linearly through keys in current node. If match found, returns current node. If not found and node is leaf, returns `NULL`. Otherwise recurses into child subtree `children[i]`. |
+| [void splitChild(BTreeNode *parent, int index, BTreeNode *child)](./btree.c#L107) | **Child splitting**: Splits a full child node (having 3 keys). Allocates a new node `newChild`. Moves the rightmost key (`keys[2]`) and corresponding children to `newChild`. Promotes the median key (`keys[1]`) up into `parent->keys[index]`. Retains leftmost key in `child`. |
+| [void insertNonFull(BTreeNode *node, int key)](./btree.c#L156) | **Insert into non-full node**: If node is a leaf, inserts `key` into its proper sorted position by shifting larger keys right. If internal node, finds child subtree; if child is full, invokes `splitChild`, decides which of the split halves to enter, and recurses. |
+| [void insert(BTreeNode **root, int key)](./btree.c#L205) | **B-Tree insertion**: If tree is empty, creates leaf root. If root has $\text{MAX\_KEYS}$, creates a new root, sets old root as `children[0]`, calls `splitChild(newRoot, 0, oldRoot)` (increasing tree height by 1), and calls `insertNonFull`. Otherwise calls `insertNonFull` directly on root. |
+| [void traverse(BTreeNode *root)](./btree.c#L247) | **In-order traversal**: Iterates through keys $0 \dots \text{numKeys}-1$, recursively traversing child subtree `children[i]` before printing `keys[i]`, followed by the final child subtree `children[numKeys]`. Prints all keys sorted. |
+| [void searchKey(BTreeNode *root, int key)](./btree.c#L274) | **Search helper**: Calls `search()` and prints whether key was found in the B-Tree. |
+| [int main()](./btree.c#L291) | **Test driver**: Inserts multiple keys causing internal node and root splits, traverses tree, and tests search queries. |
 
 ---
 
@@ -343,20 +344,20 @@ typedef struct FibHeap {
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [FibHeap *makeHeap(void)](./fibonacciHeap.c#L67) | **Initialize heap**: Allocates and initializes an empty `FibHeap` with `min = NULL` and `n = 0`. |
-| [FibNode *makeNode(int key)](./fibonacciHeap.c#L83) | **Initialize node**: Allocates a `FibNode` with `key = key`, `degree = 0`, `mark = 0`, `parent = child = NULL`, and self-referencing circular pointers (`left = right = this`). |
-| [static void insertAfter(FibNode *a, FibNode *x)](./fibonacciHeap.c#L105) | **List splicing**: Inserts node `x` immediately to the right of node `a` in a circular doubly linked list in $O(1)$ time. |
-| [static void removeFromList(FibNode *x)](./fibonacciHeap.c#L116) | **List removal**: Splices node `x` out of its circular list by joining its left and right neighbors. Resets `x->left = x->right = x`. |
-| [static void addToRootList(FibHeap *H, FibNode *x)](./fibonacciHeap.c#L127) | **Add to root list**: Unsets parent pointer, resets `mark = 0`, and splices `x` into heap `H`'s root list. Updates `H->min` if `x->key < H->min->key`. |
-| [FibNode *fibInsert(FibHeap *H, int key)](./fibonacciHeap.c#L151) | **Insert key**: Creates a node with `key`, adds to root list in $O(1)$ time, increments `H->n`, and returns node pointer. |
-| [FibNode *fibMinimum(FibHeap *H)](./fibonacciHeap.c#L162) | **Inspect minimum**: Returns pointer `H->min` in $O(1)$ worst-case time. |
-| [FibNode *fibExtractMin(FibHeap *H)](./fibonacciHeap.c#L171) | **Extract minimum**: Removes `H->min`. Promotes all children of `H->min` into the root list. Re-links root list, decrements `n`, calls `consolidate(H)` to pair trees of equal degree, and returns extracted node. $O(\log n)$ amortized time. |
-| [void consolidate(FibHeap *H)](./fibonacciHeap.c#L224) | **Tree consolidation**: Scans roots using an auxiliary degree array (`table[64]`). Whenever two trees share degree $d$, the tree with the larger root is linked as a child under the smaller root (`FibHeap-Link`), incrementing degree, until all root degrees are unique. |
-| [void cut(FibHeap *H, FibNode *x, FibNode *y)](./fibonacciHeap.c#L308) | **Cut operation**: Removes child `x` from child list of `y`, decrements `y->degree`, and adds `x` to heap root list. |
-| [void cascadingCut(FibHeap *H, FibNode *y)](./fibonacciHeap.c#L327) | **Cascading cut**: If `y` is parented: if `y->mark == 0`, sets `y->mark = 1`; if `y->mark == 1`, cuts `y` from its parent `z` and recurses upward with `cascadingCut(H, z)`. |
-| [int fibDecreaseKey(FibHeap *H, FibNode *x, int newKey)](./fibonacciHeap.c#L350) | **Decrease key**: Validates `newKey <= x->key`. Updates `x->key = newKey`. If heap property is violated (`x->key < x->parent->key`), cuts `x` from parent and triggers `cascadingCut` on parent. Updates `H->min`. Takes $O(1)$ amortized time. |
-| [FibHeap *fibUnion(FibHeap *H1, FibHeap *H2)](./fibonacciHeap.c#L379) | **Heap merge**: Concatenates circular root lists of `H1` and `H2` in $O(1)$ time, updates overall min pointer, sets total node count `n = H1->n + H2->n`, and frees superseded header. |
-| [int main()](./fibonacciHeap.c#L420) | **Test driver**: Performs insertions, minimum extraction, amortized $O(1)$ key reduction (`fibDecreaseKey`), and priority drainage in sorted order. |
+| [FibHeap *makeHeap(void)](./fibonacciHeap.c#L62) | **Initialize heap**: Allocates and initializes an empty `FibHeap` with `min = NULL` and `n = 0`. |
+| [FibNode *makeNode(int key)](./fibonacciHeap.c#L78) | **Initialize node**: Allocates a `FibNode` with `key = key`, `degree = 0`, `mark = 0`, `parent = child = NULL`, and self-referencing circular pointers (`left = right = this`). |
+| [static void insertAfter(FibNode *a, FibNode *x)](./fibonacciHeap.c#L99) | **List splicing**: Inserts node `x` immediately to the right of node `a` in a circular doubly linked list in $O(1)$ time. |
+| [static void removeFromList(FibNode *x)](./fibonacciHeap.c#L111) | **List removal**: Splices node `x` out of its circular list by joining its left and right neighbors. Resets `x->left = x->right = x`. |
+| [static void addToRootList(FibHeap *H, FibNode *x)](./fibonacciHeap.c#L123) | **Add to root list**: Unsets parent pointer, resets `mark = 0`, and splices `x` into heap `H`'s root list. Updates `H->min` if `x->key < H->min->key`. |
+| [FibNode *fibInsert(FibHeap *H, int key)](./fibonacciHeap.c#L148) | **Insert key**: Creates a node with `key`, adds to root list in $O(1)$ time, increments `H->n`, and returns node pointer. |
+| [FibNode *fibMinimum(FibHeap *H)](./fibonacciHeap.c#L160) | **Inspect minimum**: Returns pointer `H->min` in $O(1)$ worst-case time. |
+| [FibNode *fibExtractMin(FibHeap *H)](./fibonacciHeap.c#L170) | **Extract minimum**: Removes `H->min`. Promotes all children of `H->min` into the root list. Re-links root list, decrements `n`, calls `consolidate(H)` to pair trees of equal degree, and returns extracted node. $O(\log n)$ amortized time. |
+| [void consolidate(FibHeap *H)](./fibonacciHeap.c#L226) | **Tree consolidation**: Scans roots using an auxiliary degree array (`table[64]`). Whenever two trees share degree $d$, the tree with the larger root is linked as a child under the smaller root (`FibHeap-Link`), incrementing degree, until all root degrees are unique. |
+| [void cut(FibHeap *H, FibNode *x, FibNode *y)](./fibonacciHeap.c#L297) | **Cut operation**: Removes child `x` from child list of `y`, decrements `y->degree`, and adds `x` to heap root list. |
+| [void cascadingCut(FibHeap *H, FibNode *y)](./fibonacciHeap.c#L317) | **Cascading cut**: If `y` is parented: if `y->mark == 0`, sets `y->mark = 1`; if `y->mark == 1`, cuts `y` from its parent `z` and recurses upward with `cascadingCut(H, z)`. |
+| [int fibDecreaseKey(FibHeap *H, FibNode *x, int newKey)](./fibonacciHeap.c#L340) | **Decrease key**: Validates `newKey <= x->key`. Updates `x->key = newKey`. If heap property is violated (`x->key < x->parent->key`), cuts `x` from parent and triggers `cascadingCut` on parent. Updates `H->min`. Takes $O(1)$ amortized time. |
+| [FibHeap *fibUnion(FibHeap *H1, FibHeap *H2)](./fibonacciHeap.c#L369) | **Heap merge**: Concatenates circular root lists of `H1` and `H2` in $O(1)$ time, updates overall min pointer, sets total node count `n = H1->n + H2->n`, and frees superseded header. |
+| [int main()](./fibonacciHeap.c#L407) | **Test driver**: Performs insertions, minimum extraction, amortized $O(1)$ key reduction (`fibDecreaseKey`), and priority drainage in sorted order. |
 
 ---
 
@@ -392,9 +393,9 @@ int numSets;   // Total count of disjoint partitions
 
 | Function Signature | Description & Algorithm |
 | :--- | :--- |
-| [void makeSet(int n)](./disjointset.c#L53) | **Initialization**: Allocates arrays for `n` elements. Initializes `parent[i] = i`, `rankArr[i] = 0`, `sz[i] = 1`, and `numSets = n`. |
-| [int find(int x)](./disjointset.c#L78) | **Find with path compression**: Recursively traverses to root: `parent[x] = find(parent[x])`. Flattens tree structure on unwinding and returns the root. |
-| [int unionByRank(int a, int b)](./disjointset.c#L92) | **Union by rank**: Finds roots `rootA = find(a)` and `rootB = find(b)`. If identical, elements are already unified (returns `0`, detecting a cycle). Otherwise attaches smaller rank root to larger rank root (incrementing rank if tied), sums component sizes, decrements `numSets`, and returns `1`. |
+| [void makeSet(int n)](./disjointset.c#L46) | **Initialization**: Allocates arrays for `n` elements. Initializes `parent[i] = i`, `rankArr[i] = 0`, `sz[i] = 1`, and `numSets = n`. |
+| [int find(int x)](./disjointset.c#L73) | **Find with path compression**: Recursively traverses to root: `parent[x] = find(parent[x])`. Flattens tree structure on unwinding and returns the root. |
+| [int unionByRank(int a, int b)](./disjointset.c#L88) | **Union by rank**: Finds roots `rootA = find(a)` and `rootB = find(b)`. If identical, elements are already unified (returns `0`, detecting a cycle). Otherwise attaches smaller rank root to larger rank root (incrementing rank if tied), sums component sizes, decrements `numSets`, and returns `1`. |
 | [int isConnected(int a, int b)](./disjointset.c#L129) | **Connectivity query**: Evaluates `find(a) == find(b)`. Returns `1` if they belong to the same partition, otherwise `0`. |
 | [int getComponentSize(int x)](./disjointset.c#L137) | **Component size**: Finds root of `x` and returns `sz[root]`. |
 | [void freeSet()](./disjointset.c#L146) | **Cleanup**: Releases dynamically allocated memory for `parent`, `rankArr`, and `sz`. |
@@ -402,9 +403,71 @@ int numSets;   // Total count of disjoint partitions
 
 ---
 
-## 4. Graph Representations & Traversals
+## 4. Hashing & Associative Tables
 
-### 4.1 Graph (Adjacency Matrix) — [graph.c](./graph.c)
+### 4.1 Hash Table (Open Addressing & Linear Probing) — [hash.c](./hash.c)
+
+#### Theoretical Concept
+A **Hash Table** is an associative data structure that stores key-value pairs so search, insertion, update, and deletion can be done in constant average time.
+
+The implementation in [hash.c](./hash.c) uses:
+- **Hash Function**: Converts an integer key into a valid slot index.
+- **Open Addressing**: All entries live in a single array instead of separate linked lists.
+- **Linear Probing**: If a collision occurs, the table checks the next slot in order until it finds an available or matching slot.
+- **Tombstones (`DELETED`)**: Deleted positions are kept as markers so later lookups continue probing correctly without losing data.
+
+The core formula is:
+$$\text{index} = (\text{hashFunction}(key) + i) \bmod size$$
+where `i` increases from `0` upward during collision resolution.
+
+#### Complexity Analysis
+| Operation | Average Case | Worst Case | Space Complexity |
+| :--- | :--- | :--- | :--- |
+| **Insert** | $O(1)$ | $O(n)$ | $O(size)$ |
+| **Search** | $O(1)$ | $O(n)$ | $O(size)$ |
+| **Update** | $O(1)$ | $O(n)$ | $O(size)$ |
+| **Delete** | $O(1)$ | $O(n)$ | $O(size)$ |
+
+#### Data Structure Definition
+```c
+#define EMPTY 0
+#define OCCUPIED 1
+#define DELETED 2
+
+typedef struct {
+    int key;
+    int value;
+    int state;
+} HashEntry;
+
+typedef struct {
+    HashEntry *table;
+    int size;
+    int count;
+    int collisions;
+} HashTable;
+```
+
+#### Functions List & Explanations
+
+| Function Signature | Description & Algorithm |
+| :--- | :--- |
+| [int hashFunction(int key, int size)](./hash.c#L23) | **Compute bucket index**: Uses `key % size` and adjusts negatives so the result always stays in the valid range `[0, size - 1]`. |
+| [void initHashTable(HashTable *ht, int size)](./hash.c#L33) | **Initialize table**: Allocates a dynamic array of `HashEntry`, sets `count = 0`, resets `collisions`, and marks every slot as `EMPTY`. |
+| [void freeHashTable(HashTable *ht)](./hash.c#L60) | **Free memory**: Releases the table array and resets all fields to safe default values. |
+| [int insert(HashTable *ht, int key, int value)](./hash.c#L69) | **Insert key/value**: Computes the primary hash index, linearly probes for the next available slot, reuses a `DELETED` tombstone when present, and returns `1` on success or `0` if the key already exists. |
+| [int searchHash(HashTable *ht, int key)](./hash.c#L124) | **Search for a key**: Probes forward until it finds the key, reaches an `EMPTY` slot, or completes the full cycle. Returns the slot index or `-1` if not found. |
+| [int updateHash(HashTable *ht, int key, int newValue)](./hash.c#L147) | **Update value**: Uses `searchHash()` to locate the existing item and overwrites the stored value. Returns `1` on success, `0` otherwise. |
+| [int deleteHash(HashTable *ht, int key)](./hash.c#L160) | **Delete key**: Marks the matching slot as `DELETED` rather than clearing it immediately, preserving probe continuity for other keys in the cluster. |
+| [void displayHashTable(HashTable *ht)](./hash.c#L174) | **Display current table**: Prints each occupied index together with its key and value, then reports the active count and collision count. |
+| [float loadFactor(HashTable *ht)](./hash.c#L190) | **Load factor**: Computes $\alpha = \frac{count}{size}$ to check how full the table is before more insertions. |
+| [int main()](./hash.c#L199) | **Test driver**: Inserts several integer pairs, shows collisions, searches for missing and present keys, updates an existing value, deletes an entry, and prints the final table state. |
+
+---
+
+## 5. Graph Representations & Traversals
+
+### 5.1 Graph (Adjacency Matrix) — [graph.c](./graph.c)
 
 #### Theoretical Concept
 An **Adjacency Matrix** represents a graph with $V$ vertices using a 2D array of dimensions $V \times V$:
@@ -445,7 +508,7 @@ int numVertices = 0;                       // Active vertex count
 
 ---
 
-### 4.2 Graph (Adjacency List) — [GraphAdjList.c](./GraphAdjList.c)
+### 5.2 Graph (Adjacency List) — [GraphAdjList.c](./GraphAdjList.c)
 
 #### Theoretical Concept
 An **Adjacency List** represents a graph as an array of linked lists of size $V$. Each entry `adjLists[u]` points to a linked list storing all vertices directly connected to vertex $u$.
@@ -491,30 +554,16 @@ typedef struct Graph {
 
 ---
 
-## Compilation & Execution Guide
+## 6. Compilation & Execution Guide
 
-All implementations are written in standard C99/C11 and depend only on the standard C library (`stdio.h`, `stdlib.h`, `limits.h`). They can be compiled using `gcc` or `clang`.
+All implementations are written in standard C99/C11 and depend only on the standard C library (`stdio.h`, `stdlib.h`, `string.h`, `limits.h`). They can be compiled using `gcc` or `clang`.
 
-### Compiling Any File
+### Compiling Standalone Programs (with `main`)
 ```bash
 # General syntax
 gcc -Wall -Wextra -O2 <filename.c> -o <output_binary>
-```
 
-Source files in the repository:
-- [stack.c](./stack.c)
-- [queue.c](./queue.c)
-- [doublyLinkedList.c](./doublyLinkedList.c)
-- [binarySearchTree.c](./binarySearchTree.c)
-- [avlTree.c](./avlTree.c)
-- [btree.c](./btree.c)
-- [fibonacciHeap.c](./fibonacciHeap.c)
-- [disjointset.c](./disjointset.c)
-- [graph.c](./graph.c)
-- [GraphAdjList.c](./GraphAdjList.c)
-
-#### Examples:
-```bash
+# Examples:
 gcc -Wall -Wextra -O2 stack.c -o stack
 gcc -Wall -Wextra -O2 queue.c -o queue
 gcc -Wall -Wextra -O2 doublyLinkedList.c -o dll
@@ -523,6 +572,7 @@ gcc -Wall -Wextra -O2 avlTree.c -o avl
 gcc -Wall -Wextra -O2 btree.c -o btree
 gcc -Wall -Wextra -O2 fibonacciHeap.c -o fibheap
 gcc -Wall -Wextra -O2 disjointset.c -o dsu
+gcc -Wall -Wextra -O2 hash.c -o hash
 gcc -Wall -Wextra -O2 graph.c -o graph_mat
 gcc -Wall -Wextra -O2 GraphAdjList.c -o graph_list
 ```
@@ -537,7 +587,7 @@ gcc -Wall -Wextra -O2 GraphAdjList.c -o graph_list
 ./btree
 ./fibheap
 ./dsu
+./hash
 ./graph_mat
 ./graph_list
 ```
-
