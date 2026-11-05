@@ -252,9 +252,11 @@ typedef struct Node {
 A **B-Tree** is a self-balancing search tree designed to optimize read and write operations on block-storage media (disks, file systems, databases). In a B-Tree, nodes may have more than two children and contain multiple sorted keys.
 
 This implementation uses **Order 4 (minimum degree $t = 2$)**:
-- Maximum keys per node: $\text{MAX\_KEYS} = 2t - 1 = 3$
-- Minimum keys per non-root node: $\text{MIN\_KEYS} = t - 1 = 1$
-- Maximum children per node: $\text{MAX\_CHILDREN} = 2t = 4$
+- Maximum keys per node: `MAX_KEYS` $= 2t - 1 = 3$
+- Minimum keys per non-root node: `MIN_KEYS` $= t - 1 = 1$
+- Maximum children per node: `MAX_CHILDREN` $= 2t = 4$
+
+
 
 #### Key Invariants
 1. All leaf nodes reside at the **exact same depth**.
